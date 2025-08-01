@@ -94,9 +94,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>🚀 LinkedIn Automation Analytics Dashboard</h1>
+        <h1>LinkedIn Automation Analytics Dashboard</h1>
         
-        <button class="refresh-btn" onclick="loadAnalytics()">🔄 Refresh Data</button>
+        <button class="refresh-btn" onclick="loadAnalytics()">Refresh Data</button>
         
         <div class="stats-grid">
             <div class="stat-card">
@@ -126,7 +126,7 @@
         </div>
 
         <div class="recent-posts">
-            <h2>📝 Recent Posts</h2>
+            <h2>Recent Posts</h2>
             <div id="recentPostsList">
                 <!-- Posts will be loaded here -->
             </div>
@@ -142,7 +142,7 @@
                     content_theme: 'devops',
                     quality_score: 8,
                     estimated_engagement: 'high',
-                    post_text: '🚀 DevOps teams are seeing 40% faster deployments with this approach...',
+                    post_text: 'DevOps teams are seeing 40% faster deployments with this approach...',
                     status: 'published'
                 },
                 {
@@ -258,16 +258,16 @@
             container.innerHTML = recentPosts.map(post => `
                 <div class="post-item">
                     <div class="post-meta">
-                        📅 ${new Date(post.timestamp).toLocaleString()} | 
+                        ${new Date(post.timestamp).toLocaleString()} | 
                         🎯 ${post.content_theme} | 
-                        ⭐ Quality: ${post.quality_score}/10
+                        Quality: ${post.quality_score}/10
                     </div>
                     <div class="post-content">
                         ${post.post_text.substring(0, 200)}${post.post_text.length > 200 ? '...' : ''}
                     </div>
                     <div class="post-stats">
-                        <span>📊 ${post.estimated_engagement} engagement</span>
-                        <span>✅ ${post.status}</span>
+                        <span>${post.estimated_engagement} engagement</span>
+                        <span>${post.status}</span>
                     </div>
                 </div>
             `).join('');

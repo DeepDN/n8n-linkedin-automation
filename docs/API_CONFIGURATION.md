@@ -1,15 +1,15 @@
-# 🔑 API Configuration Guide
+#  API Configuration Guide
 
 This guide provides detailed instructions for setting up all required API integrations.
 
-## 📋 Overview
+##  Overview
 
 Required APIs:
-- ✅ **OpenAI API** - Content and image generation
-- ✅ **LinkedIn API** - Social media posting
-- ⚠️ **Google Sheets API** - Analytics logging (optional)
+- - **OpenAI API** - Content and image generation
+- - **LinkedIn API** - Social media posting
+- - **Google Sheets API** - Analytics logging (optional)
 
-## 🤖 OpenAI API Configuration
+##  OpenAI API Configuration
 
 ### Step 1: Account Setup
 
@@ -72,7 +72,7 @@ curl -X POST "https://api.openai.com/v1/images/generations" \
    - Monitor usage at [OpenAI Usage](https://platform.openai.com/usage)
    - Expected cost: ~$0.08 per post (GPT-4 + DALL-E)
 
-## 🔗 LinkedIn API Configuration
+##  LinkedIn API Configuration
 
 ### Step 1: Create LinkedIn App
 
@@ -88,7 +88,7 @@ curl -X POST "https://api.openai.com/v1/images/generations" \
      LinkedIn Page: [Your personal or company page]
      Privacy policy URL: [Your website or GitHub repo]
      App logo: [Upload 400x400px professional logo]
-     Legal agreement: ✅ Accept
+     Legal agreement: - Accept
      ```
 
 ### Step 2: Configure App Products
@@ -141,7 +141,7 @@ curl -X POST "https://api.openai.com/v1/images/generations" \
    - Ensure "Share on LinkedIn" permission is granted
    - Test with a sample post
 
-## 📊 Google Sheets API Configuration (Optional)
+##  Google Sheets API Configuration (Optional)
 
 ### Step 1: Google Cloud Setup
 
@@ -199,7 +199,7 @@ curl -X POST "https://api.openai.com/v1/images/generations" \
    - Create test workflow with Google Sheets node
    - Verify it can read/write to your sheet
 
-## 🔧 Advanced Configuration
+##  Advanced Configuration
 
 ### OpenAI Optimization
 
@@ -259,7 +259,7 @@ curl -X POST "https://api.openai.com/v1/images/generations" \
    // Prevent invalid data entry
    ```
 
-## 🚨 Security Best Practices
+##  Security Best Practices
 
 ### API Key Security
 
@@ -285,7 +285,7 @@ curl -X POST "https://api.openai.com/v1/images/generations" \
    - Implement automatic token refresh
    - Handle token expiration gracefully
 
-## 📊 Monitoring & Alerts
+##  Monitoring & Alerts
 
 ### Usage Monitoring
 
@@ -322,7 +322,7 @@ curl -X POST "https://api.openai.com/v1/images/generations" \
    // Handle temporary failures gracefully
    ```
 
-## 🧪 Testing Checklist
+##  Testing Checklist
 
 ### Pre-Production Testing
 
@@ -343,7 +343,7 @@ curl -X POST "https://api.openai.com/v1/images/generations" \
 - [ ] Content quality maintained
 - [ ] Costs within budget
 
-## 💰 Cost Estimation
+##  Cost Estimation
 
 ### OpenAI Costs (Daily Posts)
 
@@ -378,7 +378,7 @@ Monthly (30 posts): ~$1.05
 - n8n Cloud: $20-50
 - **Total: $21-53/month**
 
-## 📞 Support Resources
+##  Support Resources
 
 ### Official Documentation
 

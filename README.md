@@ -1,4 +1,4 @@
-# 🚀 LinkedIn AI Content Automation
+# LinkedIn AI Content Automation
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![n8n](https://img.shields.io/badge/n8n-Compatible-FF6D5A)](https://n8n.io)
@@ -7,18 +7,18 @@
 
 Automate high-quality LinkedIn posts with AI-generated content, images, and SEO-optimized hashtags. Built for DevOps and AI professionals to maintain consistent, engaging social media presence.
 
-## ✨ Features
+## Features
 
-- 🤖 **AI-Powered Content Generation** - GPT-4 creates engaging posts
-- 🎨 **Professional Image Creation** - DALL-E generates LinkedIn-optimized visuals
-- 📊 **SEO-Optimized Hashtags** - Strategic hashtag generation for maximum reach
-- ⏰ **Smart Scheduling** - Posts at optimal times (Tue/Wed/Thu 10 AM IST)
-- 🔍 **Intelligent Content Curation** - Scrapes and filters trending tech content
-- 📈 **Quality Assurance** - Content validation and fallback systems
-- 📊 **Analytics Dashboard** - Track performance and optimize strategy
-- ☁️ **Cloud-Ready** - Designed for n8n Cloud deployment
+- **AI-Powered Content Generation** - GPT-4 creates engaging posts
+- **Professional Image Creation** - DALL-E generates LinkedIn-optimized visuals
+- **SEO-Optimized Hashtags** - Strategic hashtag generation for maximum reach
+- **Smart Scheduling** - Posts at optimal times (Tue/Wed/Thu 10 AM IST)
+- **Intelligent Content Curation** - Scrapes and filters trending tech content
+- **Quality Assurance** - Content validation and fallback systems
+- **Analytics Dashboard** - Track performance and optimize strategy
+- **Cloud-Ready** - Designed for n8n Cloud deployment
 
-## 🏗️ Architecture
+## Architecture
 
 ```mermaid
 graph TD
@@ -38,7 +38,7 @@ graph TD
     J --> L[Analytics Logger]
 ```
 
-## 📋 Prerequisites
+## Prerequisites
 
 ### Required Accounts & API Keys
 
@@ -68,14 +68,14 @@ graph TD
 - Modern web browser
 - Internet connection
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Option 1: n8n Cloud Deployment (Recommended)
 
 1. **Clone Repository**
    ```bash
-   git clone https://github.com/yourusername/linkedin-ai-automation.git
-   cd linkedin-ai-automation
+   git clone https://github.com/DeepDN/n8n-linkedin-automation.git
+   cd n8n-linkedin-automation
    ```
 
 2. **Set Up n8n Cloud**
@@ -115,10 +115,10 @@ graph TD
    - Open http://localhost:5678
    - Import workflow from `workflows/` directory
 
-## 📁 Project Structure
+## Project Structure
 
 ```
-linkedin-ai-automation/
+n8n-linkedin-automation/
 ├── README.md                          # This file
 ├── LICENSE                           # MIT License
 ├── .gitignore                       # Git ignore rules
@@ -156,7 +156,7 @@ linkedin-ai-automation/
     └── workflow-execution.json     # Execution examples
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -213,7 +213,7 @@ const contentSources = {
 };
 ```
 
-## 🔧 API Setup Guide
+## API Setup Guide
 
 ### 1. OpenAI API Setup
 
@@ -255,7 +255,7 @@ const contentSources = {
 5. Share Google Sheet with service account email
 6. Extract client_email and private_key from JSON
 
-## 🌐 n8n Cloud Deployment
+## n8n Cloud Deployment
 
 ### Step 1: Prepare Workflow
 
@@ -313,7 +313,7 @@ const contentSources = {
    - Connect to Google Sheets data
    - Monitor key metrics
 
-## 📊 Monitoring & Analytics
+## Monitoring & Analytics
 
 ### Key Metrics to Track
 
@@ -344,7 +344,7 @@ Access the dashboard at `monitoring/analytics-dashboard.html`:
 - API usage statistics
 - Error logs and debugging info
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -378,7 +378,7 @@ N8N_LOG_LEVEL=debug
 N8N_LOG_OUTPUT=console,file
 ```
 
-## 🎨 Customization
+## Customization
 
 ### Content Templates
 
@@ -419,7 +419,7 @@ const imagePrompts = {
 };
 ```
 
-## 💰 Cost Estimation
+## Cost Estimation
 
 ### Monthly Costs (Daily Posts)
 
@@ -439,7 +439,7 @@ const imagePrompts = {
 3. Batch API requests
 4. Monitor usage with alerts
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
@@ -451,8 +451,8 @@ const imagePrompts = {
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/linkedin-ai-automation.git
-cd linkedin-ai-automation
+git clone https://github.com/DeepDN/n8n-linkedin-automation.git
+cd n8n-linkedin-automation
 
 # Install dependencies
 npm install
@@ -465,26 +465,26 @@ cp config/.env.example .env
 npm run dev
 ```
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [n8n](https://n8n.io) - Workflow automation platform
 - [OpenAI](https://openai.com) - AI content generation
 - [LinkedIn](https://developer.linkedin.com) - Social media platform
 - Community contributors and testers
 
-## 📞 Support
+## Support
 
-- 📧 Email: your-email@domain.com
-- 💬 Discord: [Join our community](https://discord.gg/your-server)
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/linkedin-ai-automation/issues)
-- 📖 Documentation: [Wiki](https://github.com/yourusername/linkedin-ai-automation/wiki)
+- Email: your-email@domain.com
+- Discord: [Join our community](https://discord.gg/your-server)
+- Issues: [GitHub Issues](https://github.com/DeepDN/n8n-linkedin-automation/issues)
+- Documentation: [Wiki](https://github.com/DeepDN/n8n-linkedin-automation/wiki)
 
 ---
 
-**Made with ❤️ for the DevOps and AI community**
+**Made with love for the DevOps and AI community**
 
-⭐ Star this repository if it helps you automate your LinkedIn presence!
+Star this repository if it helps you automate your LinkedIn presence!
