@@ -1,0 +1,161 @@
+{
+  "name": "Enhanced LinkedIn AI Content Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 4 * * 2,3,4"
+            }
+          ]
+        }
+      },
+      "name": "Smart Schedule (Tue/Wed/Thu 10AM IST)",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "id": "smart-cron-trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Smart content source selection based on day of week\nconst today = new Date().getDay();\nconst contentSources = {\n  2: 'https://feeds.feedburner.com/oreilly/radar', // Tuesday - O'Reilly\n  3: 'https://techcrunch.com/category/artificial-intelligence/feed/', // Wednesday - TechCrunch AI\n  4: 'https://kubernetes.io/feed.xml' // Thursday - Kubernetes\n};\n\nconst selectedSource = contentSources[today] || contentSources[2];\n\nreturn [{\n  json: {\n    feedUrl: selectedSource,\n    dayOfWeek: today,\n    contentTheme: today === 2 ? 'technical' : today === 3 ? 'ai-trends' : 'devops-tools'\n  }\n}];"
+      },
+      "name": "Smart Source Selection",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300],
+      "id": "smart-source-selector"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.feedUrl }}",
+        "options": {}
+      },
+      "name": "Dynamic Content Scraper",
+      "type": "n8n-nodes-base.rss",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "id": "dynamic-scraper"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Enhanced content filtering with quality scoring\nconst items = $input.all();\nconst theme = $('Smart Source Selection').item.json.contentTheme;\n\n// Keywords by theme\nconst themeKeywords = {\n  'technical': ['devops', 'kubernetes', 'docker', 'ci/cd', 'automation', 'infrastructure'],\n  'ai-trends': ['ai', 'artificial intelligence', 'machine learning', 'llm', 'gpt', 'neural'],\n  'devops-tools': ['monitoring', 'observability', 'terraform', 'jenkins', 'aws', 'cloud']\n};\n\nconst keywords = themeKeywords[theme] || themeKeywords['technical'];\n\n// Score content based on relevance and freshness\nconst scoredItems = items.map(item => {\n  const title = item.json.title.toLowerCase();\n  const description = (item.json.description || '').toLowerCase();\n  const pubDate = new Date(item.json.pubDate);\n  const daysSincePublished = (Date.now() - pubDate.getTime()) / (1000 * 60 * 60 * 24);\n  \n  // Relevance score (0-10)\n  let relevanceScore = 0;\n  keywords.forEach(keyword => {\n    if (title.includes(keyword)) relevanceScore += 3;\n    if (description.includes(keyword)) relevanceScore += 1;\n  });\n  \n  // Freshness score (0-5)\n  const freshnessScore = Math.max(0, 5 - daysSincePublished);\n  \n  // Quality indicators\n  const hasNumbers = /\\d+/.test(title);\n  const hasActionWords = /(how|why|what|guide|tutorial|tips)/.test(title.toLowerCase());\n  const qualityBonus = (hasNumbers ? 1 : 0) + (hasActionWords ? 1 : 0);\n  \n  const totalScore = relevanceScore + freshnessScore + qualityBonus;\n  \n  return {\n    ...item,\n    json: {\n      ...item.json,\n      contentScore: totalScore,\n      theme: theme\n    }\n  };\n});\n\n// Filter and sort by score\nconst qualifiedItems = scoredItems\n  .filter(item => item.json.contentScore >= 3)\n  .sort((a, b) => b.json.contentScore - a.json.contentScore);\n\n// Return top item or random from top 3\nif (qualifiedItems.length > 0) {\n  const topItems = qualifiedItems.slice(0, Math.min(3, qualifiedItems.length));\n  const selectedIndex = Math.floor(Math.random() * topItems.length);\n  return [topItems[selectedIndex]];\n}\n\nreturn [];"
+      },
+      "name": "Smart Content Filter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300],
+      "id": "smart-content-filter"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "chatId": "gpt-4",
+        "text": "=Create an engaging LinkedIn post for DevOps/AI professionals based on this content:\n\nTitle: {{ $json.title }}\nDescription: {{ $json.description }}\nURL: {{ $json.link }}\nContent Theme: {{ $json.theme }}\nQuality Score: {{ $json.contentScore }}\n\nRequirements:\n- Target audience: Senior developers, DevOps engineers, tech leaders, CTOs\n- Tone: Professional but conversational, thought-provoking\n- Length: 900-1200 characters (leave room for hashtags)\n- Structure: Hook + Insight + Practical value + Call to action\n- Include 1-2 relevant emojis (not excessive)\n- Make it discussion-worthy and shareable\n- Avoid buzzwords and hype\n- Focus on practical insights and real-world applications\n\nStyle guidelines:\n- Start with an attention-grabbing hook or question\n- Share a specific insight, learning, or perspective\n- Provide actionable advice or thought-provoking analysis\n- End with a question or discussion starter\n- Use line breaks for readability\n- Include personal perspective or industry insight\n- Make it valuable for the target audience\n\nDo NOT include hashtags in the response - they will be generated separately.\n\nFormat the response as a clean LinkedIn post ready to publish."
+      },
+      "name": "Enhanced Post Generator",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1120, 300],
+      "id": "enhanced-post-generator"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "chatId": "gpt-4",
+        "text": "=Generate 10-12 strategic hashtags for this LinkedIn post about {{ $('Smart Content Filter').item.json.theme }}:\n\nPost content: {{ $('Enhanced Post Generator').item.json.choices[0].message.content }}\nOriginal title: {{ $('Smart Content Filter').item.json.title }}\n\nHashtag strategy:\n- 3-4 broad trending tags (#DevOps, #AI, #CloudComputing, #TechLeadership)\n- 3-4 specific technical tags related to the content\n- 2-3 community/engagement tags (#DevOpsCommunity, #TechTalk, #SoftwareEngineering)\n- 1-2 niche tags for targeted reach\n\nRequirements:\n- Mix of high-volume (100K+ posts) and niche hashtags\n- Relevant to the content and target audience\n- Include both trending and evergreen tags\n- Consider current tech trends and buzzwords\n- Optimize for LinkedIn algorithm\n- Format as a single line with spaces between hashtags\n- Start each hashtag with #\n- No explanations, just the hashtags\n\nExample format: #DevOps #AI #MachineLearning #CloudComputing #Automation #TechLeadership #DevOpsCommunity #SoftwareEngineering #Innovation #TechTrends"
+      },
+      "name": "Strategic Hashtag Generator",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1120, 480],
+      "id": "strategic-hashtag-generator"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "generate",
+        "prompt": "=Create a professional LinkedIn-appropriate image for a {{ $('Smart Content Filter').item.json.theme }} post about: {{ $('Smart Content Filter').item.json.title }}\n\nStyle requirements:\n- Clean, modern, professional aesthetic suitable for business social media\n- Color scheme: Professional blues (#0077B5 LinkedIn blue), whites, light grays\n- Minimalist design with clear visual hierarchy\n- Tech-focused but not overly complex\n- High contrast for mobile viewing\n- Professional illustration style, not photorealistic\n- Suitable for LinkedIn feed display\n\nVisual elements to include:\n- Relevant tech icons or symbols related to the topic\n- Clean geometric shapes and modern design elements\n- Professional gradients or subtle patterns\n- Abstract representations of the technology discussed\n\nAvoid:\n- Cluttered or busy designs\n- Bright, flashy colors that don't match LinkedIn aesthetic\n- Comic or cartoon styles\n- Text overlays or typography\n- Stock photo aesthetics\n- Overly complex technical diagrams",
+        "size": "1024x1024",
+        "responseFormat": "url"
+      },
+      "name": "Professional Image Generator",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1120, 660],
+      "id": "professional-image-generator"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Enhanced content combination with quality checks\nconst postContent = $('Enhanced Post Generator').item.json.choices[0].message.content;\nconst hashtags = $('Strategic Hashtag Generator').item.json.choices[0].message.content;\nconst imageUrl = $('Professional Image Generator').item.json.data[0].url;\nconst originalData = $('Smart Content Filter').item.json;\n\n// Quality validation\nconst contentLength = postContent.length;\nconst hasCallToAction = /\\?|thoughts|think|share|comment|discuss|agree|experience/i.test(postContent);\nconst hasEmojis = /[\\u{1F600}-\\u{1F64F}]|[\\u{1F300}-\\u{1F5FF}]|[\\u{1F680}-\\u{1F6FF}]|[\\u{1F1E0}-\\u{1F1FF}]/u.test(postContent);\n\n// Combine post content with hashtags\nconst fullPost = `${postContent}\\n\\n${hashtags}`;\n\n// Generate metadata\nconst metadata = {\n  contentLength: contentLength,\n  hasCallToAction: hasCallToAction,\n  hasEmojis: hasEmojis,\n  qualityScore: originalData.contentScore,\n  theme: originalData.theme,\n  hashtagCount: (hashtags.match(/#/g) || []).length,\n  estimatedEngagement: contentLength > 800 && hasCallToAction && hasEmojis ? 'high' : 'medium'\n};\n\nreturn [{\n  json: {\n    postText: fullPost,\n    imageUrl: imageUrl,\n    originalUrl: originalData.link,\n    originalTitle: originalData.title,\n    timestamp: new Date().toISOString(),\n    metadata: metadata,\n    source: originalData.theme\n  }\n}];"
+      },
+      "name": "Enhanced Content Combiner",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 480],
+      "id": "enhanced-content-combiner"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.metadata.estimatedEngagement }}",
+              "rightValue": "high",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Quality Gate",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1560, 480],
+      "id": "quality-gate"
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "create",
+        "text": "={{ $json.postText }}",
+        "additionalFields": {
+          "mediaUrl": "={{ $json.imageUrl }}"
+        }
+      },
+      "name": "Publish to LinkedIn",
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [1780, 400],
+      "id": "linkedin-publisher"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": "YOUR_GOOGLE_SHEET_ID",
+        "sheetName": "LinkedIn Posts",
+        "columnToMatchOn": "timestamp",
+        "valueToMatchOn": "={{ $json.timestamp }}",
+        "valuesToSend": {
+          "timestamp": "={{ $json.timestamp }}",
+          "post_text": "={{ $json.postText }}",
+          "image_url": "={{ $json.imageUrl }}",
+          "original_url": "={{ $json.originalUrl }}",
+          "original_title": "={{ $json.originalTitle }}",
+          "content_theme": "={{ $json.source }}",
+          "quality_score": "={{ $json.metadata.qualityScore }}",
+          "estimated_engagement": "={{ $json.metadata.estimatedEngagement }}",
+          "hashtag_count": "={{ $json.metadata.hashtagCount }}",\n          \"status\": \"published\"\n        }\n      },\n      \"name\": \"Enhanced Logging\",\n      \"type\": \"n8n-nodes-base.googleSheets\",\n      \"typeVersion\": 4,\n      \"position\": [2000, 400],\n      \"id\": \"enhanced-logger\"\n    },\n    {\n      \"parameters\": {\n        \"resource\": \"chat\",\n        \"operation\": \"create\",\n        \"chatId\": \"gpt-4\",\n        \"text\": \"=Create a backup LinkedIn post for {{ $('Smart Content Filter').item.json.theme }} content. This is a fallback when the primary content doesn't meet quality standards.\\n\\nRequirements:\\n- Generic but valuable content about {{ $('Smart Content Filter').item.json.theme }}\\n- Include industry insights or tips\\n- Professional tone\\n- Include call to action\\n- 800-1000 characters\\n- No hashtags (will be added separately)\\n\\nMake it engaging and discussion-worthy for DevOps/AI professionals.\"\n      },\n      \"name\": \"Fallback Content Generator\",\n      \"type\": \"n8n-nodes-base.openAi\",\n      \"typeVersion\": 1,\n      \"position\": [1780, 560],\n      \"id\": \"fallback-generator\"\n    },\n    {\n      \"parameters\": {\n        \"jsCode\": \"// Create fallback post with generic hashtags\\nconst fallbackContent = $('Fallback Content Generator').item.json.choices[0].message.content;\\nconst theme = $('Smart Content Filter').item.json.theme;\\n\\n// Generic hashtags by theme\\nconst genericHashtags = {\\n  'technical': '#DevOps #TechLeadership #SoftwareEngineering #CloudComputing #Automation #TechTrends #Innovation #DevOpsCommunity',\\n  'ai-trends': '#AI #MachineLearning #ArtificialIntelligence #TechInnovation #AITrends #TechLeadership #Innovation #TechCommunity',\\n  'devops-tools': '#DevOps #CloudNative #Infrastructure #Monitoring #SRE #TechTools #DevOpsCommunity #TechLeadership'\\n};\\n\\nconst selectedHashtags = genericHashtags[theme] || genericHashtags['technical'];\\nconst fullFallbackPost = `${fallbackContent}\\\\n\\\\n${selectedHashtags}`;\\n\\nreturn [{\\n  json: {\\n    postText: fullFallbackPost,\\n    imageUrl: 'https://via.placeholder.com/1024x1024/0077B5/FFFFFF?text=Tech+Insights', // Placeholder image\\n    originalUrl: 'https://example.com',\\n    originalTitle: 'Fallback Content',\\n    timestamp: new Date().toISOString(),\\n    metadata: {\\n      contentLength: fallbackContent.length,\\n      hasCallToAction: true,\\n      hasEmojis: false,\\n      qualityScore: 5,\\n      theme: theme,\\n      hashtagCount: 8,\\n      estimatedEngagement: 'medium',\\n      isFallback: true\\n    },\\n    source: `${theme}-fallback`\\n  }\\n}];\"\n      },\n      \"name\": \"Fallback Content Combiner\",\n      \"type\": \"n8n-nodes-base.code\",\n      \"typeVersion\": 2,\n      \"position\": [2000, 560],\n      \"id\": \"fallback-combiner\"\n    }\n  ],\n  \"connections\": {\n    \"Smart Schedule (Tue/Wed/Thu 10AM IST)\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Smart Source Selection\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Smart Source Selection\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Dynamic Content Scraper\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Dynamic Content Scraper\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Smart Content Filter\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Smart Content Filter\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Enhanced Post Generator\",\n            \"type\": \"main\",\n            \"index\": 0\n          },\n          {\n            \"node\": \"Strategic Hashtag Generator\",\n            \"type\": \"main\",\n            \"index\": 0\n          },\n          {\n            \"node\": \"Professional Image Generator\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Enhanced Post Generator\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Enhanced Content Combiner\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Strategic Hashtag Generator\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Enhanced Content Combiner\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Professional Image Generator\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Enhanced Content Combiner\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Enhanced Content Combiner\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Quality Gate\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Quality Gate\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Publish to LinkedIn\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ],\n        [\n          {\n            \"node\": \"Fallback Content Generator\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Publish to LinkedIn\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Enhanced Logging\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Fallback Content Generator\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Fallback Content Combiner\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Fallback Content Combiner\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Publish to LinkedIn\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    }\n  }\n}

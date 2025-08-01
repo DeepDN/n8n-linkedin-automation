@@ -1,0 +1,64 @@
+{
+  "name": "linkedin-ai-automation",
+  "version": "1.0.0",
+  "description": "Automate high-quality LinkedIn posts with AI-generated content, images, and SEO-optimized hashtags",
+  "main": "index.js",
+  "scripts": {
+    "start": "n8n start",
+    "dev": "n8n start --tunnel",
+    "build": "echo 'No build step required'",
+    "test": "node scripts/test-apis.sh",
+    "deploy": "./scripts/deploy.sh",
+    "backup": "./scripts/backup-workflow.sh",
+    "validate": "node scripts/validate-workflow.js"
+  },
+  "keywords": [
+    "linkedin",
+    "automation",
+    "ai",
+    "content-generation",
+    "social-media",
+    "n8n",
+    "openai",
+    "devops",
+    "workflow"
+  ],
+  "author": {
+    "name": "Your Name",
+    "email": "your.email@domain.com",
+    "url": "https://github.com/yourusername"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/linkedin-ai-automation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/linkedin-ai-automation/issues"
+  },
+  "homepage": "https://github.com/yourusername/linkedin-ai-automation#readme",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "n8n": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  },
+  "n8n": {
+    "workflows": [
+      "workflows/enhanced-workflow.json",
+      "workflows/basic-workflow.json"
+    ],
+    "credentials": [
+      "config/credentials-template.json"
+    ]
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/yourusername"
+  }
+}
