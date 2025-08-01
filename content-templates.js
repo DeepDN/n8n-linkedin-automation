@@ -4,10 +4,10 @@
 const postTemplates = {
   devops: {
     hooks: [
-      "🚀 DevOps teams are seeing 40% faster deployments with this approach...",
-      "💡 Here's what most DevOps engineers get wrong about automation:",
-      "🔧 Just discovered a game-changing DevOps practice that's saving teams hours:",
-      "⚡ The DevOps trend that's quietly revolutionizing how we deploy:"
+      "DevOps teams are seeing 40% faster deployments with this approach...",
+      "Here's what most DevOps engineers get wrong about automation:",
+      "Just discovered a game-changing DevOps practice that's saving teams hours:",
+      "The DevOps trend that's quietly revolutionizing how we deploy:"
     ],
     structures: [
       "hook + insight + practical tip + CTA",
@@ -18,10 +18,10 @@ const postTemplates = {
   
   ai: {
     hooks: [
-      "🤖 AI is reshaping software development in ways we didn't expect...",
-      "🧠 The AI breakthrough that's changing how developers work:",
-      "💭 Most teams are using AI wrong. Here's the right approach:",
-      "🎯 This AI tool just solved a problem that took us weeks:"
+      "AI is reshaping software development in ways we didn't expect...",
+      "The AI breakthrough that's changing how developers work:",
+      "Most teams are using AI wrong. Here's the right approach:",
+      "This AI tool just solved a problem that took us weeks:"
     ],
     structures: [
       "surprising fact + explanation + real-world application",
@@ -32,10 +32,10 @@ const postTemplates = {
   
   cloud: {
     hooks: [
-      "☁️ Cloud costs spiraling out of control? Here's what we learned:",
-      "🌩️ The cloud architecture mistake that cost us $50K:",
-      "⚡ Multi-cloud strategy or vendor lock-in? Here's our take:",
-      "🔒 Cloud security isn't what you think it is..."
+      "Cloud costs spiraling out of control? Here's what we learned:",
+      "The cloud architecture mistake that cost us $50K:",
+      "Multi-cloud strategy or vendor lock-in? Here's our take:",
+      "Cloud security isn't what you think it is..."
     ]
   }
 };

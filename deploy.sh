@@ -3,27 +3,27 @@
 # LinkedIn AI Content Automation - Quick Deploy Script
 # This script helps you set up the n8n workflow quickly
 
-echo "🚀 LinkedIn AI Content Automation - Quick Deploy"
+echo "LinkedIn AI Content Automation - Quick Deploy"
 echo "================================================"
 
 # Check if n8n is installed
 if ! command -v n8n &> /dev/null; then
-    echo "❌ n8n is not installed. Installing now..."
+    echo "n8n is not installed. Installing now..."
     npm install -g n8n
-    echo "✅ n8n installed successfully"
+    echo "n8n installed successfully"
 else
-    echo "✅ n8n is already installed"
+    echo "n8n is already installed"
 fi
 
 # Create n8n data directory if it doesn't exist
 N8N_DATA_DIR="$HOME/.n8n"
 if [ ! -d "$N8N_DATA_DIR" ]; then
     mkdir -p "$N8N_DATA_DIR"
-    echo "✅ Created n8n data directory"
+    echo "Created n8n data directory"
 fi
 
 # Set environment variables
-echo "🔧 Setting up environment variables..."
+echo "Setting up environment variables..."
 
 # Create .env file for n8n
 cat > .env << EOF
@@ -50,7 +50,7 @@ GOOGLE_SHEETS_PRIVATE_KEY=your_private_key
 TZ=Asia/Kolkata
 EOF
 
-echo "✅ Created .env file with configuration templates"
+echo "Created .env file with configuration templates"
 
 # Create credentials template
 cat > credentials-template.json << EOF
@@ -81,7 +81,7 @@ cat > credentials-template.json << EOF
 }
 EOF
 
-echo "✅ Created credentials template"
+echo "Created credentials template"
 
 # Create startup script
 cat > start-n8n.sh << EOF
@@ -91,7 +91,7 @@ export N8N_BASIC_AUTH_USER=admin
 export N8N_BASIC_AUTH_PASSWORD=your_secure_password_here
 export TZ=Asia/Kolkata
 
-echo "🚀 Starting n8n..."
+echo "Starting n8n..."
 echo "Access n8n at: http://localhost:5678"
 echo "Username: admin"
 echo "Password: your_secure_password_here"
@@ -101,14 +101,14 @@ EOF
 
 chmod +x start-n8n.sh
 
-echo "✅ Created startup script"
+echo "Created startup script"
 
 # Create Google Sheets template
 cat > google-sheets-template.csv << EOF
 timestamp,post_text,image_url,original_url,original_title,content_theme,quality_score,estimated_engagement,hashtag_count,status
 EOF
 
-echo "✅ Created Google Sheets template"
+echo "Created Google Sheets template"
 
 # Create quick test script
 cat > test-workflow.sh << EOF
@@ -128,26 +128,26 @@ curl -X POST "https://api.openai.com/v1/chat/completions" \
   }' > /dev/null 2>&1
 
 if [ \$? -eq 0 ]; then
-    echo "✅ OpenAI API connection successful"
+    echo "OpenAI API connection successful"
 else
-    echo "❌ OpenAI API connection failed - check your API key"
+    echo "OpenAI API connection failed - check your API key"
 fi
 
-echo "🔍 Checking RSS feeds..."
+echo "Checking RSS feeds..."
 curl -s "https://feeds.feedburner.com/oreilly/radar" | head -n 20 > /dev/null
 if [ \$? -eq 0 ]; then
-    echo "✅ RSS feed accessible"
+    echo "RSS feed accessible"
 else
-    echo "❌ RSS feed not accessible"
+    echo "RSS feed not accessible"
 fi
 
-echo "✅ Basic tests completed"
+echo "Basic tests completed"
 EOF
 
 chmod +x test-workflow.sh
 
 echo ""
-echo "🎉 Setup completed! Next steps:"
+echo "Setup completed! Next steps:"
 echo ""
 echo "1. Edit the .env file with your actual API keys:"
 echo "   - OpenAI API key from https://platform.openai.com/api-keys"
@@ -175,6 +175,6 @@ echo "   - Toggle the workflow to 'Active'"
 echo "   - It will run automatically on Tue/Wed/Thu at 10 AM IST"
 echo ""
 echo "📚 Check setup-guide.md for detailed instructions"
-echo "🔧 Check content-templates.js for customization options"
+echo "Check content-templates.js for customization options"
 echo ""
 echo "Happy automating! 🚀"

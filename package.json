@@ -1,5 +1,5 @@
 {
-  "name": "linkedin-ai-automation",
+  "name": "n8n-linkedin-automation",
   "version": "1.0.0",
   "description": "Automate high-quality LinkedIn posts with AI-generated content, images, and SEO-optimized hashtags",
   "main": "index.js",
@@ -24,19 +24,19 @@
     "workflow"
   ],
   "author": {
-    "name": "Your Name",
+    "name": "DeepDN",
     "email": "your.email@domain.com",
-    "url": "https://github.com/yourusername"
+    "url": "https://github.com/DeepDN"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/linkedin-ai-automation.git"
+    "url": "https://github.com/DeepDN/n8n-linkedin-automation.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/linkedin-ai-automation/issues"
+    "url": "https://github.com/DeepDN/n8n-linkedin-automation/issues"
   },
-  "homepage": "https://github.com/yourusername/linkedin-ai-automation#readme",
+  "homepage": "https://github.com/DeepDN/n8n-linkedin-automation#readme",
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
@@ -59,6 +59,6 @@
   },
   "funding": {
     "type": "github",
-    "url": "https://github.com/sponsors/yourusername"
+    "url": "https://github.com/sponsors/DeepDN"
   }
 }

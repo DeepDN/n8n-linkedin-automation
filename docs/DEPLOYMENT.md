@@ -1,15 +1,15 @@
-# 🚀 Deployment Guide
+#  Deployment Guide
 
 This guide covers deploying the LinkedIn AI Content Automation system to n8n Cloud for production use.
 
-## 📋 Deployment Overview
+##  Deployment Overview
 
 **Deployment Options:**
-1. ✅ **n8n Cloud** (Recommended) - Fully managed, reliable
-2. ⚠️ **Self-hosted** - More control, requires maintenance
-3. ⚠️ **Local Development** - Testing only
+1. - **n8n Cloud** (Recommended) - Fully managed, reliable
+2. - **Self-hosted** - More control, requires maintenance
+3. - **Local Development** - Testing only
 
-## 🌐 n8n Cloud Deployment (Recommended)
+##  n8n Cloud Deployment (Recommended)
 
 ### Prerequisites
 
@@ -161,7 +161,7 @@ Test nodes in this order:
    - Verify posts are being created
    - Monitor for any errors
 
-## 🔧 Self-Hosted Deployment (Advanced)
+##  Self-Hosted Deployment (Advanced)
 
 ### Prerequisites
 
@@ -284,7 +284,7 @@ Test nodes in this order:
    sudo systemctl start n8n
    ```
 
-## 📊 Monitoring and Maintenance
+##  Monitoring and Maintenance
 
 ### Health Monitoring
 
@@ -368,7 +368,7 @@ Test nodes in this order:
    # Add: 0 2 * * * /home/user/backup-n8n.sh
    ```
 
-## 🔄 Updates and Maintenance
+##  Updates and Maintenance
 
 ### n8n Updates
 
@@ -403,7 +403,7 @@ Test nodes in this order:
    sudo certbot renew --dry-run
    ```
 
-## 🚨 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -442,7 +442,7 @@ Test nodes in this order:
    grep -i error ~/.n8n/logs/n8n.log
    ```
 
-## 📈 Scaling Considerations
+##  Scaling Considerations
 
 ### Performance Optimization
 
@@ -468,7 +468,7 @@ Test nodes in this order:
    - Automated failover
    - Health checks and alerts
 
-## 💰 Cost Analysis
+##  Cost Analysis
 
 ### n8n Cloud vs Self-Hosted
 
@@ -483,7 +483,7 @@ Test nodes in this order:
 
 **Recommendation**: Use n8n Cloud unless you have specific requirements for self-hosting.
 
-## 📞 Support and Resources
+##  Support and Resources
 
 ### Getting Help
 

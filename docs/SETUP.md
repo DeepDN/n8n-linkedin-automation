@@ -1,8 +1,8 @@
-# 📋 Complete Setup Guide
+# Complete Setup Guide
 
 This guide will walk you through setting up the LinkedIn AI Content Automation system step by step.
 
-## 🎯 Overview
+## Overview
 
 The setup process involves:
 1. Creating required accounts and API keys
@@ -11,7 +11,7 @@ The setup process involves:
 4. Importing and testing the workflow
 5. Activating automation
 
-## 📝 Step 1: Create Required Accounts
+## Step 1: Create Required Accounts
 
 ### 1.1 OpenAI Account Setup
 
@@ -59,8 +59,8 @@ The setup process involves:
 2. **Configure App Products**:
    - Go to Products tab
    - Request access to:
-     - ✅ "Share on LinkedIn" (usually auto-approved)
-     - ✅ "Sign In with LinkedIn" (usually auto-approved)
+     - - "Share on LinkedIn" (usually auto-approved)
+     - - "Sign In with LinkedIn" (usually auto-approved)
    - Wait for approval (usually instant)
 
 3. **Get Credentials**:
@@ -106,7 +106,7 @@ The setup process involves:
    - Note your instance URL: `https://your-instance.app.n8n.cloud`
    - Login to your n8n instance
 
-## 🔧 Step 2: Configure n8n Credentials
+##  Step 2: Configure n8n Credentials
 
 ### 2.1 OpenAI Credential
 
@@ -141,7 +141,7 @@ The setup process involves:
 5. Test connection
 6. Save as "Google Sheets - Analytics"
 
-## 📥 Step 3: Import Workflow
+##  Step 3: Import Workflow
 
 ### 3.1 Download Workflow
 
@@ -177,7 +177,7 @@ The setup process involves:
    - Click each node that needs credentials
    - Assign the appropriate credential from dropdown
 
-## 🧪 Step 4: Test the Workflow
+##  Step 4: Test the Workflow
 
 ### 4.1 Test Individual Nodes
 
@@ -223,7 +223,7 @@ The setup process involves:
    - Verify Google Sheets logging (if enabled)
    - Review generated content quality
 
-## ✅ Step 5: Activate Automation
+##  Step 5: Activate Automation
 
 ### 5.1 Final Checks
 
@@ -249,7 +249,7 @@ The setup process involves:
    - Configure webhook notifications for failures
    - Set up email alerts for errors
 
-## 📊 Step 6: Monitor Performance
+##  Step 6: Monitor Performance
 
 ### 6.1 Analytics Dashboard
 
@@ -273,7 +273,7 @@ The setup process involves:
    - A/B test different content styles
    - Optimize posting times
 
-## 🔧 Troubleshooting Common Issues
+##  Troubleshooting Common Issues
 
 ### Issue 1: OpenAI API Errors
 
@@ -311,21 +311,21 @@ The setup process involves:
 - Update content templates
 - Adjust quality scoring criteria
 
-## 📈 Success Metrics
+##  Success Metrics
 
 After 1 week of operation, you should see:
-- ✅ 3 posts published automatically
-- ✅ Quality scores averaging 7+
-- ✅ No execution errors
-- ✅ Relevant, engaging content
+- - 3 posts published automatically
+- - Quality scores averaging 7+
+- - No execution errors
+- - Relevant, engaging content
 
 After 1 month:
-- ✅ Consistent posting schedule
-- ✅ Growing LinkedIn engagement
-- ✅ Optimized content performance
-- ✅ Stable automation system
+- - Consistent posting schedule
+- - Growing LinkedIn engagement
+- - Optimized content performance
+- - Stable automation system
 
-## 🎯 Next Steps
+##  Next Steps
 
 1. **Week 1**: Monitor and fix any issues
 2. **Week 2**: Optimize content quality

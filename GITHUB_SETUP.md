@@ -1,15 +1,15 @@
-# 🐙 GitHub Setup & Deployment Guide
+# GitHub Setup & Deployment Guide
 
 This guide will help you set up the project on GitHub and deploy it to n8n Cloud.
 
-## 📋 Prerequisites
+## Prerequisites
 
-- [ ] GitHub account
-- [ ] Git installed locally
-- [ ] n8n Cloud account
-- [ ] All API keys ready (OpenAI, LinkedIn, Google Sheets)
+- GitHub account
+- Git installed locally
+- n8n Cloud account
+- All API keys ready (OpenAI, LinkedIn, Google Sheets)
 
-## 🚀 Step 1: GitHub Repository Setup
+## Step 1: GitHub Repository Setup
 
 ### 1.1 Create GitHub Repository
 
@@ -19,7 +19,7 @@ This guide will help you set up the project on GitHub and deploy it to n8n Cloud
 
 2. **Repository Settings**:
    ```
-   Repository name: linkedin-ai-automation
+   Repository name: n8n-linkedin-automation
    Description: Automate high-quality LinkedIn posts with AI-generated content, images, and SEO-optimized hashtags
    Visibility: Public (or Private if preferred)
    Initialize: Don't initialize (we have existing code)
@@ -27,7 +27,7 @@ This guide will help you set up the project on GitHub and deploy it to n8n Cloud
 
 3. **Create Repository**:
    - Click "Create repository"
-   - Note the repository URL: `https://github.com/yourusername/linkedin-ai-automation.git`
+   - Note the repository URL: `https://github.com/DeepDN/n8n-linkedin-automation.git`
 
 ### 1.2 Initialize Local Git Repository
 
@@ -53,7 +53,7 @@ git commit -m "Initial commit: LinkedIn AI Content Automation system
 - Comprehensive documentation and setup guides"
 
 # Add remote origin
-git remote add origin https://github.com/yourusername/linkedin-ai-automation.git
+git remote add origin https://github.com/DeepDN/n8n-linkedin-automation.git
 
 # Push to GitHub
 git branch -M main
@@ -76,7 +76,7 @@ git push -u origin main
    - Add rule for `main` branch
    - Require pull request reviews
 
-## 📝 Step 2: Update Documentation
+## Step 2: Update Documentation
 
 ### 2.1 Update README.md
 
@@ -84,7 +84,7 @@ Replace placeholder URLs in README.md:
 
 ```bash
 # Update GitHub URLs
-sed -i 's/yourusername/YOUR_ACTUAL_USERNAME/g' README.md
+sed -i 's/DeepDN/YOUR_ACTUAL_USERNAME/g' README.md
 sed -i 's/your-email@domain.com/YOUR_ACTUAL_EMAIL/g' README.md
 
 # Commit changes
@@ -166,22 +166,22 @@ cat > .github/pull_request_template.md << 'EOF'
 Brief description of changes
 
 ## Type of Change
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Documentation update
-- [ ] Performance improvement
-- [ ] Code refactoring
+-  Bug fix
+-  New feature
+-  Documentation update
+-  Performance improvement
+-  Code refactoring
 
 ## Testing
-- [ ] Tested locally
-- [ ] All existing tests pass
-- [ ] Added new tests (if applicable)
+-  Tested locally
+-  All existing tests pass
+-  Added new tests (if applicable)
 
 ## Checklist
-- [ ] Code follows project style guidelines
-- [ ] Self-review completed
-- [ ] Documentation updated
-- [ ] No sensitive information exposed
+-  Code follows project style guidelines
+-  Self-review completed
+-  Documentation updated
+-  No sensitive information exposed
 EOF
 
 # Commit GitHub templates
@@ -190,7 +190,7 @@ git commit -m "Add GitHub issue and PR templates"
 git push
 ```
 
-## 🌐 Step 3: n8n Cloud Deployment
+## Step 3: n8n Cloud Deployment
 
 ### 3.1 Prepare for Cloud Deployment
 
@@ -209,8 +209,8 @@ git push
 1. **Download Workflow from GitHub**:
    ```bash
    # Clone your repository (or download specific file)
-   git clone https://github.com/yourusername/linkedin-ai-automation.git
-   cd linkedin-ai-automation
+   git clone https://github.com/DeepDN/n8n-linkedin-automation.git
+   cd n8n-linkedin-automation
    ```
 
 2. **Import to n8n Cloud**:
@@ -273,7 +273,7 @@ git push
    - Check "Smart Schedule" node
    - Confirm cron expression: `30 4 * * 2,3,4` (Tue/Wed/Thu 10 AM IST)
 
-## 🧪 Step 4: Testing & Validation
+## Step 4: Testing & Validation
 
 ### 4.1 Test Individual Nodes
 
@@ -302,16 +302,16 @@ Execute nodes in this order:
 ### 4.3 Production Activation
 
 1. **Final Checks**:
-   - [ ] All nodes execute successfully
-   - [ ] LinkedIn posting works
-   - [ ] Content quality is acceptable
-   - [ ] No error messages
+   -  All nodes execute successfully
+   -  LinkedIn posting works
+   -  Content quality is acceptable
+   -  No error messages
 
 2. **Activate Workflow**:
    - Toggle workflow to "Active"
    - Monitor first automated execution
 
-## 📊 Step 5: Set Up Monitoring
+## Step 5: Set Up Monitoring
 
 ### 5.1 GitHub Repository Monitoring
 
@@ -354,7 +354,7 @@ Execute nodes in this order:
    - Monitor API usage
    - Watch for rate limits
 
-## 📈 Step 6: Analytics & Optimization
+## Step 6: Analytics & Optimization
 
 ### 6.1 Deploy Analytics Dashboard
 
@@ -383,7 +383,7 @@ Execute nodes in this order:
 3. **Enable GitHub Pages**:
    - Go to repository Settings → Pages
    - Source: Deploy from branch `gh-pages`
-   - Your dashboard will be available at: `https://yourusername.github.io/linkedin-ai-automation`
+   - Your dashboard will be available at: `https://DeepDN.github.io/n8n-linkedin-automation`
 
 ### 6.2 Performance Tracking
 
@@ -397,7 +397,7 @@ Execute nodes in this order:
    - Update content templates
    - Optimize AI prompts
 
-## 🔄 Step 7: Maintenance & Updates
+## Step 7: Maintenance & Updates
 
 ### 7.1 Regular Updates
 
@@ -432,14 +432,14 @@ Execute nodes in this order:
    - Document new features and fixes
    - Provide upgrade instructions
 
-## 🚨 Step 8: Security & Best Practices
+## Step 8: Security & Best Practices
 
 ### 8.1 Security Checklist
 
-- [ ] No API keys in repository
-- [ ] Sensitive files in .gitignore
-- [ ] Regular dependency updates
-- [ ] Monitor for security vulnerabilities
+-  No API keys in repository
+-  Sensitive files in .gitignore
+-  Regular dependency updates
+-  Monitor for security vulnerabilities
 
 ### 8.2 Backup Strategy
 
@@ -454,7 +454,7 @@ Execute nodes in this order:
    - Enable GitHub repository backup
    - Consider multiple git remotes
 
-## 📞 Step 9: Community & Support
+## Step 9: Community & Support
 
 ### 9.1 Documentation
 
@@ -493,44 +493,44 @@ Execute nodes in this order:
    - Share experiences
    - Help other users
 
-## ✅ Deployment Checklist
+## Deployment Checklist
 
 ### Pre-Deployment
-- [ ] GitHub repository created and configured
-- [ ] All documentation updated
-- [ ] API keys obtained and tested
-- [ ] n8n Cloud account set up
+-  GitHub repository created and configured
+-  All documentation updated
+-  API keys obtained and tested
+-  n8n Cloud account set up
 
 ### Deployment
-- [ ] Workflow imported to n8n Cloud
-- [ ] All credentials configured
-- [ ] Individual nodes tested
-- [ ] Full workflow tested
-- [ ] LinkedIn posting verified
+-  Workflow imported to n8n Cloud
+-  All credentials configured
+-  Individual nodes tested
+-  Full workflow tested
+-  LinkedIn posting verified
 
 ### Post-Deployment
-- [ ] Workflow activated
-- [ ] Monitoring set up
-- [ ] Analytics dashboard deployed
-- [ ] First automated execution verified
-- [ ] Documentation finalized
+-  Workflow activated
+-  Monitoring set up
+-  Analytics dashboard deployed
+-  First automated execution verified
+-  Documentation finalized
 
 ### Ongoing
-- [ ] Weekly performance reviews
-- [ ] Monthly optimizations
-- [ ] Regular backups
-- [ ] Community engagement
+-  Weekly performance reviews
+-  Monthly optimizations
+-  Regular backups
+-  Community engagement
 
-## 🎉 Success Metrics
+## Success Metrics
 
 After 1 month of operation, you should see:
-- ✅ 12+ high-quality LinkedIn posts published
-- ✅ Consistent posting schedule maintained
-- ✅ Growing LinkedIn engagement
-- ✅ Stable automation system
-- ✅ Active GitHub repository with documentation
+- 12+ high-quality LinkedIn posts published
+- Consistent posting schedule maintained
+- Growing LinkedIn engagement
+- Stable automation system
+- Active GitHub repository with documentation
 
-## 📞 Getting Help
+## Getting Help
 
 - **GitHub Issues**: Report bugs and request features
 - **n8n Community**: [community.n8n.io](https://community.n8n.io)
