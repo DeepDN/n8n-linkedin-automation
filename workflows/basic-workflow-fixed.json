@@ -1,0 +1,116 @@
+{
+  "name": "Basic LinkedIn AI Content Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 10 * * 2,3,4"
+            }
+          ]
+        }
+      },
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "id": "schedule-trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.feedburner.com/oreilly/radar",
+        "options": {}
+      },
+      "name": "RSS Feed Reader",
+      "type": "n8n-nodes-base.rss",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "id": "rss-reader"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Simple content filter - get first item\nconst items = $input.all();\nif (items.length > 0) {\n  return [items[0]];\n}\nreturn [];"
+      },
+      "name": "Content Filter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300],
+      "id": "content-filter"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "chatId": "gpt-4",
+        "text": "=Create a LinkedIn post based on this article:\n\nTitle: {{ $json.title }}\nDescription: {{ $json.description }}\n\nMake it professional, engaging, and include relevant hashtags."
+      },
+      "name": "AI Post Generator",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "id": "ai-generator"
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "text": "={{ $json.choices[0].message.content }}",
+        "additionalFields": {
+          "visibilityCode": "anyone"
+        }
+      },
+      "name": "LinkedIn Publisher",
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [1120, 300],
+      "id": "linkedin-publisher"
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "RSS Feed Reader",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed Reader": {
+      "main": [
+        [
+          {
+            "node": "Content Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Filter": {
+      "main": [
+        [
+          {
+            "node": "AI Post Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Post Generator": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn Publisher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

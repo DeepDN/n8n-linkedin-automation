@@ -1,0 +1,239 @@
+{
+  "name": "Enhanced LinkedIn AI Content Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 4 * * 2,3,4"
+            }
+          ]
+        }
+      },
+      "name": "Smart Schedule",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "id": "smart-cron-trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const today = new Date().getDay();\nconst contentSources = {\n  2: 'https://feeds.feedburner.com/oreilly/radar',\n  3: 'https://techcrunch.com/category/artificial-intelligence/feed/',\n  4: 'https://kubernetes.io/feed.xml'\n};\n\nconst selectedSource = contentSources[today] || contentSources[2];\n\nreturn [{\n  json: {\n    feedUrl: selectedSource,\n    dayOfWeek: today,\n    contentTheme: today === 2 ? 'technical' : today === 3 ? 'ai-trends' : 'devops-tools'\n  }\n}];"
+      },
+      "name": "Smart Source Selection",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300],
+      "id": "smart-source-selector"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.feedUrl }}"
+      },
+      "name": "Dynamic Content Scraper",
+      "type": "n8n-nodes-base.rss",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "id": "dynamic-scraper"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst theme = $('Smart Source Selection').item.json.contentTheme;\n\nconst themeKeywords = {\n  'technical': ['devops', 'kubernetes', 'docker', 'ci/cd', 'automation'],\n  'ai-trends': ['ai', 'artificial intelligence', 'machine learning', 'llm'],\n  'devops-tools': ['monitoring', 'observability', 'terraform', 'jenkins']\n};\n\nconst keywords = themeKeywords[theme] || themeKeywords['technical'];\n\nconst scoredItems = items.map(item => {\n  const title = item.json.title.toLowerCase();\n  const description = (item.json.description || '').toLowerCase();\n  \n  let relevanceScore = 0;\n  keywords.forEach(keyword => {\n    if (title.includes(keyword)) relevanceScore += 3;\n    if (description.includes(keyword)) relevanceScore += 1;\n  });\n  \n  return {\n    ...item,\n    json: {\n      ...item.json,\n      contentScore: relevanceScore,\n      theme: theme\n    }\n  };\n});\n\nconst qualifiedItems = scoredItems\n  .filter(item => item.json.contentScore >= 2)\n  .sort((a, b) => b.json.contentScore - a.json.contentScore);\n\nif (qualifiedItems.length > 0) {\n  return [qualifiedItems[0]];\n}\n\nreturn [];"
+      },
+      "name": "Smart Content Filter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300],
+      "id": "smart-content-filter"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "model": "gpt-4",
+        "messages": {
+          "values": [
+            {
+              "content": "=Create an engaging LinkedIn post based on this content:\n\nTitle: {{ $json.title }}\nDescription: {{ $json.description }}\nTheme: {{ $json.theme }}\n\nRequirements:\n- Professional tone for DevOps/AI professionals\n- Include key insights from the content\n- Add personal commentary\n- Include a call-to-action question\n- 800-1000 characters\n- No hashtags (will be added separately)\n\nMake it engaging and discussion-worthy.",
+              "role": "user"
+            }
+          ]
+        }
+      },
+      "name": "Enhanced Post Generator",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1120, 200],
+      "id": "enhanced-post-generator"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "model": "gpt-4",
+        "messages": {
+          "values": [
+            {
+              "content": "=Generate strategic LinkedIn hashtags for this {{ $json.theme }} content:\n\nTitle: {{ $json.title }}\n\nRequirements:\n- 8-12 relevant hashtags\n- Mix of popular and niche tags\n- Focus on {{ $json.theme }} theme\n- Format as space-separated hashtags\n- No explanations, just hashtags",
+              "role": "user"
+            }
+          ]
+        }
+      },
+      "name": "Strategic Hashtag Generator",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1120, 400],
+      "id": "strategic-hashtag-generator"
+    },
+    {
+      "parameters": {
+        "jsCode": "const postContent = $('Enhanced Post Generator').item.json.choices[0].message.content;\nconst hashtags = $('Strategic Hashtag Generator').item.json.choices[0].message.content;\nconst originalData = $('Smart Content Filter').item.json;\n\nconst fullPost = `${postContent}\\n\\n${hashtags}`;\n\nconst hasCallToAction = /(what do you think|thoughts|share your|comment|let me know)/i.test(postContent);\nconst hashtagCount = (hashtags.match(/#/g) || []).length;\nconst qualityScore = Math.min(10, originalData.contentScore + (hasCallToAction ? 2 : 0));\n\nreturn [{\n  json: {\n    postText: fullPost,\n    originalUrl: originalData.link || originalData.url,\n    originalTitle: originalData.title,\n    timestamp: new Date().toISOString(),\n    metadata: {\n      contentLength: fullPost.length,\n      hasCallToAction: hasCallToAction,\n      qualityScore: qualityScore,\n      theme: originalData.theme,\n      hashtagCount: hashtagCount,\n      estimatedEngagement: qualityScore >= 8 ? 'high' : qualityScore >= 6 ? 'medium' : 'low'\n    },\n    source: originalData.theme\n  }\n}];"
+      },
+      "name": "Enhanced Content Combiner",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 300],
+      "id": "enhanced-content-combiner"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "quality-check",
+              "leftValue": "={{ $json.metadata.qualityScore }}",
+              "rightValue": 5,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "name": "Quality Gate",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1560, 300],
+      "id": "quality-gate"
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "text": "={{ $json.postText }}",
+        "additionalFields": {
+          "visibilityCode": "anyone"
+        }
+      },
+      "name": "Publish to LinkedIn",
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [1780, 300],
+      "id": "linkedin-publisher"
+    }
+  ],
+  "connections": {
+    "Smart Schedule": {
+      "main": [
+        [
+          {
+            "node": "Smart Source Selection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Smart Source Selection": {
+      "main": [
+        [
+          {
+            "node": "Dynamic Content Scraper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dynamic Content Scraper": {
+      "main": [
+        [
+          {
+            "node": "Smart Content Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Smart Content Filter": {
+      "main": [
+        [
+          {
+            "node": "Enhanced Post Generator",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Strategic Hashtag Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enhanced Post Generator": {
+      "main": [
+        [
+          {
+            "node": "Enhanced Content Combiner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Strategic Hashtag Generator": {
+      "main": [
+        [
+          {
+            "node": "Enhanced Content Combiner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enhanced Content Combiner": {
+      "main": [
+        [
+          {
+            "node": "Quality Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quality Gate": {
+      "main": [
+        [
+          {
+            "node": "Publish to LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
