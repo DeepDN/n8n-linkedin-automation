@@ -1,0 +1,122 @@
+{
+  "name": "Working LinkedIn AI Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 10 * * 1-5"
+            }
+          ]
+        }
+      },
+      "name": "Daily Schedule",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "id": "daily-schedule"
+    },
+    {
+      "parameters": {
+        "url": "https://feeds.feedburner.com/oreilly/radar"
+      },
+      "name": "Tech News RSS",
+      "type": "n8n-nodes-base.rss",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "id": "tech-rss"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the first article from RSS feed\nconst items = $input.all();\nif (items && items.length > 0) {\n  return [items[0]];\n}\nreturn [];"
+      },
+      "name": "Select Article",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300],
+      "id": "select-article"
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "model": "gpt-4",
+        "messages": {
+          "values": [
+            {
+              "content": "=Create a professional LinkedIn post based on this article:\n\nTitle: {{ $json.title }}\nSummary: {{ $json.description }}\n\nRequirements:\n- Professional tone for tech professionals\n- 2-3 sentences with key insight\n- Include 3-5 relevant hashtags\n- Add engaging question at the end\n- Keep under 300 characters\n\nFormat: [Post content] [Hashtags] [Question]",
+              "role": "user"
+            }
+          ]
+        }
+      },
+      "name": "Generate Post",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "id": "generate-post"
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "text": "={{ $json.choices[0].message.content }}",
+        "additionalFields": {
+          "visibilityCode": "anyone"
+        }
+      },
+      "name": "Post to LinkedIn",
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [1120, 300],
+      "id": "post-linkedin"
+    }
+  ],
+  "connections": {
+    "Daily Schedule": {
+      "main": [
+        [
+          {
+            "node": "Tech News RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tech News RSS": {
+      "main": [
+        [
+          {
+            "node": "Select Article",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Article": {
+      "main": [
+        [
+          {
+            "node": "Generate Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Post": {
+      "main": [
+        [
+          {
+            "node": "Post to LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

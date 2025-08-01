@@ -81,7 +81,7 @@ graph TD
 2. **Set Up n8n Cloud**
    - Log into your n8n Cloud account
    - Create new workflow
-   - Import `workflows/enhanced-workflow.json`
+   - Import `workflows/working-linkedin-workflow.json` (recommended)
 
 3. **Configure Credentials**
    - Add OpenAI API credential
@@ -102,13 +102,13 @@ graph TD
 
 2. **Run Setup Script**
    ```bash
-   chmod +x scripts/deploy.sh
-   ./scripts/deploy.sh
+   chmod +x deploy.sh
+   ./deploy.sh
    ```
 
 3. **Start n8n**
    ```bash
-   ./scripts/start-n8n.sh
+   n8n start
    ```
 
 4. **Import Workflow**
@@ -120,41 +120,42 @@ graph TD
 ```
 n8n-linkedin-automation/
 ├── README.md                          # This file
+├── GETTING_STARTED.md                 # Quick setup guide
 ├── LICENSE                           # MIT License
 ├── .gitignore                       # Git ignore rules
 ├── package.json                     # Project metadata
+├── deploy.sh                        # Quick deployment script
 ├── workflows/
-│   ├── basic-workflow.json          # Simple workflow
-│   ├── enhanced-workflow.json       # Production workflow
-│   └── workflow-backup.json         # Backup version
+│   ├── working-linkedin-workflow.json    # Recommended workflow
+│   ├── enhanced-workflow-clean.json      # Advanced workflow
+│   └── basic-workflow-fixed.json         # Simple workflow
 ├── docs/
 │   ├── SETUP.md                     # Detailed setup guide
 │   ├── API_CONFIGURATION.md         # API setup instructions
-│   ├── DEPLOYMENT.md                # Deployment guide
-│   ├── TROUBLESHOOTING.md           # Common issues & solutions
-│   └── CUSTOMIZATION.md             # Customization guide
-├── scripts/
-│   ├── deploy.sh                    # Quick deployment script
-│   ├── start-n8n.sh               # Local n8n startup
-│   ├── test-apis.sh                # API connectivity tests
-│   └── backup-workflow.sh          # Workflow backup utility
-├── templates/
-│   ├── content-templates.js         # Content generation templates
-│   ├── hashtag-strategies.js       # Hashtag optimization
-│   └── image-prompts.js            # DALL-E prompt templates
-├── config/
-│   ├── .env.example                # Environment variables template
-│   ├── credentials-template.json    # n8n credentials template
-│   └── google-sheets-template.csv   # Logging template
-├── monitoring/
-│   ├── analytics-dashboard.html     # Performance dashboard
-│   ├── health-check.js             # System health monitoring
-│   └── performance-metrics.js      # Analytics utilities
-└── examples/
-    ├── sample-posts.md             # Example generated posts
-    ├── api-responses.json          # Sample API responses
-    └── workflow-execution.json     # Execution examples
+│   └── DEPLOYMENT.md                # Deployment guide
+└── config/
+    └── .env.example                 # Environment variables template
 ```
+
+## Workflow Options
+
+### 1. working-linkedin-workflow.json (Recommended)
+- **Nodes**: 5 nodes with essential functionality
+- **Features**: RSS feed reading, AI content generation, LinkedIn posting
+- **Best for**: Getting started quickly, production use
+- **File size**: 3KB
+
+### 2. enhanced-workflow-clean.json (Advanced)
+- **Nodes**: 9 nodes with advanced features
+- **Features**: Smart content filtering, quality gates, fallback systems
+- **Best for**: Advanced users who want comprehensive automation
+- **File size**: 8.5KB
+
+### 3. basic-workflow-fixed.json (Simple)
+- **Nodes**: 5 nodes with minimal configuration
+- **Features**: Basic RSS to LinkedIn posting
+- **Best for**: Troubleshooting, learning n8n basics
+- **File size**: 2.7KB
 
 ## Configuration
 
@@ -259,18 +260,14 @@ const contentSources = {
 
 ### Step 1: Prepare Workflow
 
-1. **Export from Local n8n** (if testing locally):
-   ```bash
-   # Export workflow
-   curl -X GET "http://localhost:5678/api/v1/workflows/export" \
-        -H "Authorization: Bearer YOUR_API_KEY" \
-        > workflows/production-workflow.json
-   ```
+1. **Choose Workflow File**:
+   - Start with `workflows/working-linkedin-workflow.json`
+   - Advanced users can use `workflows/enhanced-workflow-clean.json`
 
 2. **Validate Workflow**:
    ```bash
    # Check workflow syntax
-   node scripts/validate-workflow.js workflows/enhanced-workflow.json
+   python3 -m json.tool workflows/working-linkedin-workflow.json
    ```
 
 ### Step 2: Deploy to n8n Cloud
@@ -281,7 +278,7 @@ const contentSources = {
 
 2. **Import Workflow**:
    - Click "Import from File"
-   - Select `workflows/enhanced-workflow.json`
+   - Select your chosen workflow file
    - Review imported nodes
 
 3. **Configure Credentials**:
@@ -289,7 +286,7 @@ const contentSources = {
    - Add each credential type:
      - OpenAI API
      - LinkedIn OAuth2 API
-     - Google Sheets Service Account
+     - Google Sheets Service Account (optional)
 
 4. **Test Workflow**:
    - Execute individual nodes
@@ -309,9 +306,9 @@ const contentSources = {
    - Set up performance alerts
 
 2. **Analytics Dashboard**:
-   - Deploy `monitoring/analytics-dashboard.html`
-   - Connect to Google Sheets data
-   - Monitor key metrics
+   - Monitor key metrics through n8n interface
+   - Track execution success rates
+   - Monitor API usage
 
 ## Monitoring & Analytics
 
@@ -334,15 +331,6 @@ const contentSources = {
   - Post engagement rates
   - Profile view increases
   - Lead generation
-
-### Analytics Dashboard
-
-Access the dashboard at `monitoring/analytics-dashboard.html`:
-
-- Real-time workflow status
-- Content performance metrics
-- API usage statistics
-- Error logs and debugging info
 
 ## Troubleshooting
 
@@ -370,6 +358,11 @@ Access the dashboard at `monitoring/analytics-dashboard.html`:
    - Check timezone settings
    - Monitor execution logs
 
+5. **Import Errors**:
+   - Start with `working-linkedin-workflow.json`
+   - Validate JSON syntax
+   - Check n8n Cloud compatibility
+
 ### Debug Mode
 
 Enable debug logging in n8n:
@@ -382,13 +375,13 @@ N8N_LOG_OUTPUT=console,file
 
 ### Content Templates
 
-Modify `templates/content-templates.js`:
+Modify content generation prompts in workflow nodes:
 ```javascript
 const postTemplates = {
   devops: {
     hooks: [
-      "🚀 DevOps teams are seeing 40% faster deployments...",
-      "💡 Here's what most DevOps engineers get wrong..."
+      "DevOps teams are seeing 40% faster deployments...",
+      "Here's what most DevOps engineers get wrong..."
     ],
     structures: [
       "hook + insight + practical tip + CTA"
@@ -399,23 +392,12 @@ const postTemplates = {
 
 ### Hashtag Strategy
 
-Update `templates/hashtag-strategies.js`:
+Update hashtag generation in workflow:
 ```javascript
 const hashtagStrategies = {
   trending: ["#DevOps", "#AI", "#CloudComputing"],
   niche: ["#Kubernetes", "#Docker", "#Terraform"],
   community: ["#DevOpsCommunity", "#TechLeadership"]
-};
-```
-
-### Image Generation
-
-Customize `templates/image-prompts.js`:
-```javascript
-const imagePrompts = {
-  devops: "Modern DevOps pipeline visualization...",
-  ai: "Abstract AI neural network...",
-  cloud: "Cloud architecture diagram..."
 };
 ```
 
